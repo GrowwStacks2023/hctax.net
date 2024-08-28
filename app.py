@@ -6,6 +6,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
 import time
 
 app = FastAPI()
@@ -22,8 +23,8 @@ def get_url(account: AccountID):
     chrome_options.add_argument("--disable-dev-shm-usage")  # Overcome limited resource problems
     chrome_options.add_argument("--disable-gpu")  # Applicable to Windows; disable GPU rendering
 
-    # Initialize the WebDriver with the specified options
-    driver = webdriver.Chrome(options=chrome_options)
+    # Use WebDriver Manager to handle the ChromeDriver binary
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
     try:
         # Navigate to the initial page
@@ -45,7 +46,7 @@ def get_url(account: AccountID):
         link.click()
 
         # Wait for the new page to load
-        time.sleep(5)  # Adjust the waiting time if necessary
+        time.sleep(5)
 
         # Get the current URL
         current_url = driver.current_url
@@ -55,6 +56,4 @@ def get_url(account: AccountID):
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
     finally:
-        # Close the WebDriver
         driver.quit()
-
