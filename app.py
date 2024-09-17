@@ -41,16 +41,26 @@ def get_url(account: AccountID):
         # Wait for the page to load and for the link to be clickable
         WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//a[contains(@onclick, 'EncryptAndGo')]")))
 
-        # Click on the link
+        # Click on the link to go to the encoded URL page
         link = driver.find_element(By.XPATH, "//a[contains(@onclick, 'EncryptAndGo')]")
         link.click()
 
         # Wait for the new page to load
         time.sleep(5)
 
-        # Get the current URL
-        current_url = driver.current_url
-        return {"url": current_url}
+        # Click on the event <h2> tag (e.g., the 'HCAD' event)
+        WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//h2[@class='left' and contains(text(), 'HCAD')]")))
+
+        # Find and click the event element
+        event_element = driver.find_element(By.XPATH, "//h2[@class='left' and contains(text(), 'HCAD')]")
+        event_element.click()
+
+        # Wait for the new page to load
+        time.sleep(5)
+
+        # Get the current URL after the second interaction
+        current_url_after_event = driver.current_url
+        return {"url": current_url_after_event}
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
