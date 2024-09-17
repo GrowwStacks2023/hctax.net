@@ -49,7 +49,7 @@ def get_url(account: AccountID):
         time.sleep(5)
 
         # Click on the HCAD button
-        hcad_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, "//h2[@class='left' and contains(text(), 'HCAD')]")))
+        hcad_button = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.XPATH, "//h2[@class='left' and contains(text(), 'HCAD')]")))
         hcad_button.click()
 
         # Wait for the new page to load
